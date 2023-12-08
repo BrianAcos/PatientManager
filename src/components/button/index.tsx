@@ -17,16 +17,16 @@ export const Button: React.FC<props> = ({ onPress, style, text }) => {
 
 const styles = StyleSheet.create({
     container: {
-        borderRadius: 100,
+        borderRadius: 40,
         backgroundColor: 'skyblue',
         justifyContent: 'center',
         alignSelf: 'center',
     },
     text: {
-        paddingHorizontal: 40,
+        paddingHorizontal: 20,
         paddingVertical: 10,
         color: 'black',
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
         textAlign: 'center',
     },

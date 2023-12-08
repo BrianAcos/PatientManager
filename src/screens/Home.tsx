@@ -6,11 +6,8 @@ import { PatientData } from '../types/types';
 import { ButtonAddPatient } from '../components/buttonAddPatient';
 import { ModalAdd } from '../components/modalAdd';
 
-const patientData = [
-  { createdAt: '2023-11-28T23:28:28.458Z', name: 'Juanita Towne', avatar: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/893.jpg', description: 'Inventore laboriosam iure corporis. Ad suscipit dolore. In distinctio illum sit eos aspernatur culpa harum nemo.\nRatione libero aspernatur aut possimus. Sint provident corrupti. Quia nostrum adipisci natus amet nesciunt quibusdam quisquam aspernatur.\nSequi nesciunt quod ipsa occaecati recusandae officia aliquid incidunt. Iste laudantium aliquam aliquid alias quae molestiae quam aspernatur. Porro maiores consequuntur odit eligendi.', website: 'https://trusting-tomorrow.biz', id: '91' },
-  { createdAt: '2023-11-28T23:28:28.458Z', name: 'Juanita Towne', avatar: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/893.jpg', description: 'Inventore laboriosam iure corporis. Ad suscipit dolore. In distinctio illum sit eos aspernatur culpa harum nemo.\nRatione libero aspernatur aut possimus. Sint provident corrupti. Quia nostrum adipisci natus amet nesciunt quibusdam quisquam aspernatur.\nSequi nesciunt quod ipsa occaecati recusandae officia aliquid incidunt. Iste laudantium aliquam aliquid alias quae molestiae quam aspernatur. Porro maiores consequuntur odit eligendi.', website: 'https://trusting-tomorrow.biz', id: '92' },
-  { createdAt: '2023-11-28T23:28:28.458Z', name: 'Juanita Towne', avatar: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/893.jpg', description: 'Inventore laboriosam iure corporis. Ad suscipit dolore. In distinctio illum sit eos aspernatur culpa harum nemo.\nRatione libero aspernatur aut possimus. Sint provident corrupti. Quia nostrum adipisci natus amet nesciunt quibusdam quisquam aspernatur.\nSequi nesciunt quod ipsa occaecati recusandae officia aliquid incidunt. Iste laudantium aliquam aliquid alias quae molestiae quam aspernatur. Porro maiores consequuntur odit eligendi.', website: 'https://trusting-tomorrow.biz', id: '93' },
-]
+const patientData = require('../../response.json');
+
 
 
 function Home(): React.JSX.Element {
@@ -40,8 +37,24 @@ function Home(): React.JSX.Element {
     getPatientData();
   }, []);
 
+  const onCloseModal = () => {
+    setModalAdd(false);
+    setPatient(null);
+  }
+
+  const onSubmit = async (patientInformation: PatientData) => {
+    setModalAdd(false);
+    setPatient(null);
+
+    if (patient === null) {
+      // ADD NEW PATIENT
+    } else {
+      // EDIT PATIENT
+    }
+  }
+
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={{ flex: 1 }}>
       {loading && <Text>Loading...</Text>}
       {error && <Text>Error</Text>}
       {!loading && !error && (
@@ -49,15 +62,15 @@ function Home(): React.JSX.Element {
           numColumns={1}
           data={patientData}
           keyExtractor={(_, idx) => `${idx}`}
-          renderItem={({ item }) => <UserCard patientData={item} />}
-          contentContainerStyle={{margin: 10}}
+          renderItem={({ item }) => <UserCard patientData={item} setModalAdd={setModalAdd} setPatient={setPatient} />}
+          contentContainerStyle={{ margin: 10, paddingBottom: 100 }}
         />
       )}
       {!loading && !error && (
         <ButtonAddPatient onPress={() => setModalAdd(true)} />
       )}
       {/* MODAL TO ADD OR EDIT PATIENT */}
-      <ModalAdd isVisible={modalAdd} patient={patient} onClose={() => setModalAdd(false)} />
+      {modalAdd && <ModalAdd isVisible={modalAdd} patient={patient} onClose={onCloseModal} onSubmit={onSubmit} />}
     </SafeAreaView >
   );
 }

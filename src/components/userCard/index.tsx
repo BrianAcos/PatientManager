@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import styles from "./styles";
 import { PatientData } from "../../types/types";
-import { Button, Image, Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Button } from "../button";
 const ArrowDown = require('../../assets/arrow_down.png');
 
 interface props {
     patientData: PatientData;
+    setModalAdd: (status: boolean) => void;
+    setPatient: (patient: PatientData) => void;
 }
 
-export const UserCard: React.FC<props> = ({ patientData }) => {
+export const UserCard: React.FC<props> = ({ patientData, setModalAdd, setPatient }) => {
     const [expand, setExpand] = useState(false);
     const dateOfADmission = new Date(patientData.createdAt);
+
+    const onPressEdit = () => {
+        setPatient(patientData);
+        setModalAdd(true);
+    }
 
     return (
         <View style={styles.userContainer}>
@@ -29,7 +37,7 @@ export const UserCard: React.FC<props> = ({ patientData }) => {
                 <View style={styles.extraDataContainer}>
                     <Text>{patientData.description}</Text>
                     <Text>{ }</Text>
-                    <Button title="Edit information" onPress={() => console.log('Open Modal')} />
+                    <Button text="Edit information" onPress={onPressEdit} />
                 </View>
             )}
         </View>
