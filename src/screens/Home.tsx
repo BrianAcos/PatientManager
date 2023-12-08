@@ -4,6 +4,7 @@ import { FlatList, SafeAreaView, ScrollView, StyleSheet, Text } from 'react-nati
 import { UserCard } from '../components/userCard';
 import { PatientData } from '../types/types';
 import { ButtonAddPatient } from '../components/buttonAddPatient';
+import { ModalAdd } from '../components/modalAdd';
 
 const patientData = [
   { createdAt: '2023-11-28T23:28:28.458Z', name: 'Juanita Towne', avatar: 'https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/893.jpg', description: 'Inventore laboriosam iure corporis. Ad suscipit dolore. In distinctio illum sit eos aspernatur culpa harum nemo.\nRatione libero aspernatur aut possimus. Sint provident corrupti. Quia nostrum adipisci natus amet nesciunt quibusdam quisquam aspernatur.\nSequi nesciunt quod ipsa occaecati recusandae officia aliquid incidunt. Iste laudantium aliquam aliquid alias quae molestiae quam aspernatur. Porro maiores consequuntur odit eligendi.', website: 'https://trusting-tomorrow.biz', id: '91' },
@@ -14,8 +15,10 @@ const patientData = [
 
 function Home(): React.JSX.Element {
   const [data, setData] = useState<PatientData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false)
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
+  const [modalEdit, setModalEdit] = useState<boolean>(false);
+  const [modalAdd, setModalAdd] = useState<boolean>(false);
 
   useEffect(() => {
     const getPatientData = async () => {
@@ -51,8 +54,9 @@ function Home(): React.JSX.Element {
         />
       )}
       {!loading && !error && (
-        <ButtonAddPatient onPress={() => console.log('PRESSED')} />
+        <ButtonAddPatient onPress={() => setModalAdd(true)} />
       )}
+      <ModalAdd isVisible={modalAdd} onClose={() => setModalAdd(false)} />
     </SafeAreaView >
   );
 }
