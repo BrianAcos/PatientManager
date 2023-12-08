@@ -17,7 +17,7 @@ function Home(): React.JSX.Element {
   const [data, setData] = useState<PatientData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const [modalEdit, setModalEdit] = useState<boolean>(false);
+  const [patient, setPatient] = useState<PatientData | null>(null);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
 
   useEffect(() => {
@@ -56,7 +56,8 @@ function Home(): React.JSX.Element {
       {!loading && !error && (
         <ButtonAddPatient onPress={() => setModalAdd(true)} />
       )}
-      <ModalAdd isVisible={modalAdd} onClose={() => setModalAdd(false)} />
+      {/* MODAL TO ADD OR EDIT PATIENT */}
+      <ModalAdd isVisible={modalAdd} patient={patient} onClose={() => setModalAdd(false)} />
     </SafeAreaView >
   );
 }
