@@ -6,8 +6,11 @@ import {PatientData} from '../types/types';
 import {ButtonAddPatient} from '../components/buttonAddPatient';
 import {ModalAdd} from '../components/modalAdd';
 import {Notifications} from '../components/Notifications';
+import {LoadingComponent} from '../components/loadingComponent';
+import {ErrorComponent} from '../components/errorComponent';
+import {NoPatientData} from '../components/noPatientData';
 
-const patientData = require('../../response.json');
+const backupPatientData = require('../../response.json');
 
 function Home(): React.JSX.Element {
   const [data, setData] = useState<PatientData[]>([]);
@@ -18,21 +21,29 @@ function Home(): React.JSX.Element {
   const [notify, setNotify] = useState<'error' | 'success' | null>(null);
   const [notifyMessage, setNotifyMessage] = useState<string>('');
 
-  useEffect(() => {
-    const getPatientData = async () => {
-      setData(patientData);
-      setLoading(false);
-      // try {
-      //   const response = await fetch('https://63bedcf7f5cfc0949b634fc8.mockapi.io/users');
-      //   const result = await response.json();
-      //   setData(result);
-      //   setLoading(false);
-      // } catch (_) {
-      //   setError(true);
-      //   setLoading(false);
-      // }
-    };
+  const getPatientData = async () => {
+    setLoading(true);
 
+    try {
+      const response = await fetch(
+        'https://63bedcf7f5cfc0949b634fc8.mockapi.io/users',
+      );
+      const result = await response.json();
+      setData(result);
+      setLoading(false);
+      setError(false);
+    } catch (_) {
+      setError(true);
+      setLoading(false);
+    }
+  };
+
+  const onPressBackup = () => {
+    setData(backupPatientData);
+    setError(false);
+  };
+
+  useEffect(() => {
     getPatientData();
   }, []);
 
@@ -71,23 +82,31 @@ function Home(): React.JSX.Element {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{flex: 1}}>
-        {loading && <Text>Loading...</Text>}
-        {error && <Text>Error</Text>}
-        {!loading && !error && (
-          <FlatList
-            numColumns={1}
-            data={data}
-            keyExtractor={(_, idx) => `${idx}`}
-            renderItem={({item}) => (
-              <UserCard
-                patientData={item}
-                setModalAdd={setModalAdd}
-                setPatient={setPatient}
+        <FlatList
+          numColumns={1}
+          data={data}
+          keyExtractor={(_, idx) => `${idx}`}
+          renderItem={({item}) => (
+            <UserCard
+              patientData={item}
+              setModalAdd={setModalAdd}
+              setPatient={setPatient}
+            />
+          )}
+          ListEmptyComponent={
+            loading ? (
+              <LoadingComponent />
+            ) : error ? (
+              <ErrorComponent
+                onPressRetry={getPatientData}
+                onPressBackup={onPressBackup}
               />
-            )}
-            contentContainerStyle={{margin: 10, paddingBottom: 100}}
-          />
-        )}
+            ) : (
+              <NoPatientData setModalAdd={setModalAdd} />
+            )
+          }
+          contentContainerStyle={{margin: 10, paddingBottom: 100}}
+        />
         {!loading && !error && (
           <ButtonAddPatient onPress={() => setModalAdd(true)} />
         )}
