@@ -77,7 +77,7 @@ export const ModalAdd: React.FC<props> = ({
 
     const newPatient: PatientData = {
       avatar: '',
-      createdAt: new Date().toISOString(),
+      createdAt: patient?.createdAt || new Date().toISOString(),
       description: '',
       id: patient?.id || '',
       name: '',
