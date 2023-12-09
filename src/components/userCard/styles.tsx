@@ -28,8 +28,7 @@ const styles = StyleSheet.create({
     paddingBottom: 3,
   },
   description: {paddingBottom: 10},
-  website: {paddingBottom: 10, fontWeight: 'bold'},
-  moreInfo: {paddingTop: 10},
+  moreInfo: {paddingBottom: 10, fontWeight: 'bold'},
 });
 
 export default styles;

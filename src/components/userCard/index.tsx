@@ -25,6 +25,16 @@ export const UserCard: React.FC<props> = ({
     setModalAdd(true);
   };
 
+  const getDOB = () => {
+    if (patientData.DOB) {
+      const [month, day, year] = patientData.DOB.split('/');
+      const date = new Date(Number(year), Number(month) - 1, Number(day));
+      return date.toLocaleDateString();
+    }
+    
+    return ''
+  };
+
   return (
     <View style={styles.userContainer}>
       <View style={styles.dataContainer}>
@@ -49,20 +59,23 @@ export const UserCard: React.FC<props> = ({
       {expand && (
         <View style={styles.extraDataContainer}>
           <Text style={styles.description}>{patientData.description}</Text>
-          <Text style={styles.website}>
+          <Text style={styles.moreInfo}>
             Website:{' '}
             <Text onPress={() => Linking.openURL(patientData.website)}>
               {patientData.website}
             </Text>
           </Text>
+          {patientData.DOB && (
+            <Text style={styles.moreInfo}>Date of birth: {getDOB()}</Text>
+          )}
           {patientData.gender && (
-            <Text style={styles.website}>Gender: {patientData.gender}</Text>
+            <Text style={styles.moreInfo}>Gender: {patientData.gender}</Text>
           )}
           {patientData.weight && (
-            <Text style={styles.website}>Weight: {patientData.weight}</Text>
+            <Text style={styles.moreInfo}>Weight: {patientData.weight}</Text>
           )}
           {patientData.height && (
-            <Text style={styles.website}>Height: {patientData.height}</Text>
+            <Text style={styles.moreInfo}>Height: {patientData.height}</Text>
           )}
           <Button text="Edit information" onPress={onPressEdit} />
         </View>

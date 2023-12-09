@@ -30,7 +30,12 @@ const inputs: Inputs[] = [
   {id: 'avatar', placeholder: 'Picture', required: false, value: ''},
   {id: 'description', placeholder: 'Description', required: true, value: ''},
   {id: 'website', placeholder: 'Website', required: true, value: ''},
-  {id: 'DOB', placeholder: 'Date of birth', required: false, value: ''},
+  {
+    id: 'DOB',
+    placeholder: 'Date of birth MM/DD/YYYY',
+    required: false,
+    value: '',
+  },
   {id: 'gender', placeholder: 'Gender', required: false, value: ''},
   {id: 'weight', placeholder: 'Weight', required: false, value: ''},
   {id: 'height', placeholder: 'Height', required: false, value: ''},
