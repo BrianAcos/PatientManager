@@ -27,7 +27,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingBottom: 3,
   },
-  website: {paddingTop: 10, paddingBottom: 20, fontWeight: 'bold'},
+  description: {paddingBottom: 10},
+  website: {paddingBottom: 10, fontWeight: 'bold'},
+  moreInfo: {paddingTop: 10},
 });
 
 export default styles;

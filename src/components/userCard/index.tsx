@@ -48,13 +48,22 @@ export const UserCard: React.FC<props> = ({
       </View>
       {expand && (
         <View style={styles.extraDataContainer}>
-          <Text>{patientData.description}</Text>
+          <Text style={styles.description}>{patientData.description}</Text>
           <Text style={styles.website}>
             Website:{' '}
             <Text onPress={() => Linking.openURL(patientData.website)}>
               {patientData.website}
             </Text>
           </Text>
+          {patientData.gender && (
+            <Text style={styles.website}>Gender: {patientData.gender}</Text>
+          )}
+          {patientData.weight && (
+            <Text style={styles.website}>Weight: {patientData.weight}</Text>
+          )}
+          {patientData.height && (
+            <Text style={styles.website}>Height: {patientData.height}</Text>
+          )}
           <Button text="Edit information" onPress={onPressEdit} />
         </View>
       )}
