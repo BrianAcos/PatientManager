@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {Provider} from 'react-redux';
+import store from '../store/store';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {UserCard} from '../components/userCard';
-import {NotificationType, PatientData} from '../types/types';
+import {PatientData} from '../types/types';
 import {ButtonAddPatient} from '../components/buttonAddPatient';
 import {ModalAdd} from '../components/modalAdd';
-import {Notifications} from '../components/Notifications';
+import {Notifications} from '../components/notifications';
 import {LoadingComponent} from '../components/loadingComponent';
 import {ErrorComponent} from '../components/errorComponent';
 import {NoPatientData} from '../components/noPatientData';
+import {setNotification } from '../actions/notifications';
 
 const backupPatientData = require('../../response.json');
 
@@ -18,8 +21,6 @@ function Home(): React.JSX.Element {
   const [error, setError] = useState<boolean>(false);
   const [patient, setPatient] = useState<PatientData | null>(null);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
-  const [notify, setNotify] = useState<NotificationType>(null);
-  const [notifyMessage, setNotifyMessage] = useState<string>('');
 
   const getPatientData = async () => {
     setLoading(true);
@@ -72,60 +73,58 @@ function Home(): React.JSX.Element {
       });
       setData(newPatientList);
     }
-    setNotify('success');
-    setNotifyMessage(`Patient successfully ${isAdding ? 'added' : 'edited'}`);
+    const message = `Patient successfully ${isAdding ? 'added' : 'edited'}`;
+    store.dispatch(setNotification(message, 'success'));
 
     setModalAdd(false);
     setPatient(null);
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{flex: 1}}>
-        <FlatList
-          numColumns={1}
-          data={data}
-          keyExtractor={(_, idx) => `${idx}`}
-          renderItem={({item}) => (
-            <UserCard
-              patientData={item}
-              setModalAdd={setModalAdd}
-              setPatient={setPatient}
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <SafeAreaView style={{flex: 1}}>
+          <FlatList
+            numColumns={1}
+            data={data}
+            keyExtractor={(_, idx) => `${idx}`}
+            renderItem={({item}) => (
+              <UserCard
+                patientData={item}
+                setModalAdd={setModalAdd}
+                setPatient={setPatient}
+              />
+            )}
+            ListEmptyComponent={
+              loading ? (
+                <LoadingComponent />
+              ) : error ? (
+                <ErrorComponent
+                  onPressRetry={getPatientData}
+                  onPressBackup={onPressBackup}
+                />
+              ) : (
+                <NoPatientData setModalAdd={setModalAdd} />
+              )
+            }
+            contentContainerStyle={{margin: 10, paddingBottom: 100}}
+          />
+          {!loading && !error && (
+            <ButtonAddPatient onPress={() => setModalAdd(true)} />
+          )}
+          {/* MODAL TO ADD OR EDIT PATIENT */}
+          {modalAdd && (
+            <ModalAdd
+              isVisible={modalAdd}
+              patient={patient}
+              onClose={onCloseModal}
+              onSubmit={onSubmit}
             />
           )}
-          ListEmptyComponent={
-            loading ? (
-              <LoadingComponent />
-            ) : error ? (
-              <ErrorComponent
-                onPressRetry={getPatientData}
-                onPressBackup={onPressBackup}
-              />
-            ) : (
-              <NoPatientData setModalAdd={setModalAdd} />
-            )
-          }
-          contentContainerStyle={{margin: 10, paddingBottom: 100}}
-        />
-        {!loading && !error && (
-          <ButtonAddPatient onPress={() => setModalAdd(true)} />
-        )}
-        {/* MODAL TO ADD OR EDIT PATIENT */}
-        {modalAdd && (
-          <ModalAdd
-            isVisible={modalAdd}
-            patient={patient}
-            onClose={onCloseModal}
-            onSubmit={onSubmit}
-          />
-        )}
-        <Notifications
-          setNotify={setNotify}
-          notify={notify}
-          message={notifyMessage}
-        />
-      </SafeAreaView>
-    </SafeAreaProvider>
+          <Notifications />
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 

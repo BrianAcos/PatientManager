@@ -1,45 +1,43 @@
 import React, {useRef} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {RootState} from '../../reducers';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {NotificationType} from '../../types/types';
+import {removeNotification} from '../../actions/notifications';
 
 const close = require('../../assets/close.png');
 
-interface props {
-  setNotify: (type: NotificationType) => void;
-  notify: NotificationType;
-  message: string;
-}
-
-export const Notifications: React.FC<props> = ({
-  setNotify,
-  notify,
-  message,
-}) => {
-  if (!notify) return null;
-
+export const Notifications: React.FC = () => {
+  const {show, type, message} = useSelector(
+    (state: RootState) => state.notifications,
+  );
+  const dispatch = useDispatch();
   const touchStart = useRef<any>(null);
   const {top} = useSafeAreaInsets();
 
+  const closeNotify = () => {
+    dispatch(removeNotification());
+  };
+
   const onTouchEnd = (e: any) => {
     if (e.nativeEvent.locationY < touchStart.current.locationY) {
-      setNotify(null);
+      closeNotify();
     }
   };
+
+  if (!show) return null;
 
   return (
     <View
       style={[
         styles.container,
-        notify === 'error' && styles.error,
+        type === 'error' && styles.error,
         {top: top + 10},
       ]}
       onTouchStart={e => (touchStart.current = e.nativeEvent)}
       onTouchEnd={onTouchEnd}>
       <Text style={styles.text}>{message}</Text>
-      <TouchableOpacity
-        onPress={() => setNotify(null)}
-        style={styles.touchable}>
+      <TouchableOpacity onPress={closeNotify} style={styles.touchable}>
         <Image source={close} style={styles.image} />
       </TouchableOpacity>
     </View>
