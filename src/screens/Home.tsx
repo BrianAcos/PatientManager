@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {FlatList, SafeAreaView, StyleSheet, Text} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {UserCard} from '../components/userCard';
-import {PatientData} from '../types/types';
+import {NotificationType, PatientData} from '../types/types';
 import {ButtonAddPatient} from '../components/buttonAddPatient';
 import {ModalAdd} from '../components/modalAdd';
 import {Notifications} from '../components/Notifications';
@@ -18,7 +18,7 @@ function Home(): React.JSX.Element {
   const [error, setError] = useState<boolean>(false);
   const [patient, setPatient] = useState<PatientData | null>(null);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
-  const [notify, setNotify] = useState<'error' | 'success' | null>(null);
+  const [notify, setNotify] = useState<NotificationType>(null);
   const [notifyMessage, setNotifyMessage] = useState<string>('');
 
   const getPatientData = async () => {

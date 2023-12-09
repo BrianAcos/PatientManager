@@ -10,3 +10,5 @@ export interface PatientData {
   weight?: string;
   height?: string;
 }
+
+export type NotificationType = 'error' | 'success' | null;

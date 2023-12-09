@@ -1,12 +1,13 @@
 import React, {useRef} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {NotificationType} from '../../types/types';
 
 const close = require('../../assets/close.png');
 
 interface props {
-  setNotify: (type: 'error' | 'success' | null) => void;
-  notify: 'error' | 'success' | null;
+  setNotify: (type: NotificationType) => void;
+  notify: NotificationType;
   message: string;
 }
 
