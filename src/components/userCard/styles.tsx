@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
   userContainer: {
@@ -22,9 +22,12 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginRight: 10,
   },
-  text: {
-    paddingBottom: 3
-  }
+  name: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    paddingBottom: 3,
+  },
+  website: {paddingTop: 10, paddingBottom: 20, fontWeight: 'bold'},
 });
 
 export default styles;
