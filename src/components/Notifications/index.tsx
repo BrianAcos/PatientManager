@@ -1,5 +1,12 @@
 import React, {useRef} from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Animated,
+  Easing,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../reducers';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -11,12 +18,19 @@ export const Notifications: React.FC = () => {
   const {show, type, message} = useSelector(
     (state: RootState) => state.notifications,
   );
+  const translateY = useRef(new Animated.Value(0)).current;
   const dispatch = useDispatch();
   const touchStart = useRef<any>(null);
   const {top} = useSafeAreaInsets();
 
   const closeNotify = () => {
-    dispatch(removeNotification());
+    Animated.timing(translateY, {
+      toValue: 100,
+      duration: 300,
+      easing: Easing.linear,
+      useNativeDriver: false
+    });
+    setTimeout(() => dispatch(removeNotification()), 1000);
   };
 
   const onTouchEnd = (e: any) => {
@@ -28,11 +42,11 @@ export const Notifications: React.FC = () => {
   if (!show) return null;
 
   return (
-    <View
+    <Animated.View
       style={[
         styles.container,
         type === 'error' && styles.error,
-        {top: top + 10},
+        {top: top + 10, transform: [{ translateY }]},
       ]}
       onTouchStart={e => (touchStart.current = e.nativeEvent)}
       onTouchEnd={onTouchEnd}>
@@ -40,7 +54,7 @@ export const Notifications: React.FC = () => {
       <TouchableOpacity onPress={closeNotify} style={styles.touchable}>
         <Image source={close} style={styles.image} />
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 

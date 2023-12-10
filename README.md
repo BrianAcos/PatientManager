@@ -1,12 +1,14 @@
 THINGS TO DO:
--CREATE STORE AND USE REDUX
--DATE PICKER
--PICKER OPTIONS
+-FINDER
+
 -MODAL DISAPEAR BETTER
--NOTIFICATION WHEN ERROR IN FORM
+
 -NOTIFICATION ANIMATION AND 5 SECONDS DISAPEAR
+
 -USER CARD ANIMATION
--IMPROVE README
+
+-IMPROVE README: Incluye instrucciones detalladas sobre cómo ejecutar la aplicación localmente.
+Proporciona documentación breve explicando tus decisiones de diseño y las bibliotecas/herramientas que utilizaste.
 
 ## Step 1: Start the Metro Server
 

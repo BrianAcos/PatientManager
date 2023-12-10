@@ -3,7 +3,7 @@ import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
 import store from '../store/store';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {UserCard} from '../components/userCard';
+import UserCard from '../components/userCard';
 import {PatientData} from '../types/types';
 import {ButtonAddPatient} from '../components/buttonAddPatient';
 import {ModalAdd} from '../components/modalAdd';
