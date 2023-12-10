@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import styles from './styles';
 import {PatientData} from '../../types/types';
 import {
@@ -47,6 +47,7 @@ export const ModalAdd: React.FC<props> = ({
   onSubmit,
   patient,
 }) => {
+  const [show, setShow] = useState(true);
   const formRefs = inputs.map(input => ({ref: useRef<any>(null), ...input}));
 
   useEffect(() => {
@@ -58,6 +59,14 @@ export const ModalAdd: React.FC<props> = ({
       });
     }
   }, []);
+
+  useEffect(() => {
+    setShow(isVisible);
+  }, [isVisible]);
+
+  const handleClose = () => {
+    setShow(false);
+  };
 
   const checkErrors = () => {
     let errors = false;
@@ -103,9 +112,10 @@ export const ModalAdd: React.FC<props> = ({
 
   return (
     <Modal
-      isVisible={isVisible}
+      onDismiss={onClose}
+      isVisible={show}
       customBackdrop={
-        <TouchableOpacity style={styles.backdrop} onPress={onClose} />
+        <TouchableOpacity style={styles.backdrop} onPress={handleClose} />
       }>
       <ScrollView style={styles.container}>
         <Text style={styles.title}>Add a new Patient</Text>
@@ -121,7 +131,7 @@ export const ModalAdd: React.FC<props> = ({
         <View style={styles.buttonContainer}>
           <Button
             text="Dismiss"
-            onPress={onClose}
+            onPress={handleClose}
             style={styles.buttonDismiss}
             textStyle={styles.buttonDismissText}
           />
