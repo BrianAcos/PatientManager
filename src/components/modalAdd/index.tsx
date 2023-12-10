@@ -10,36 +10,7 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {Button} from '../button';
-
-interface props {
-  onClose: () => void;
-  onSubmit: (patient: PatientData) => void;
-  isVisible: boolean;
-  patient: PatientData | null;
-}
-
-interface Inputs {
-  id: string;
-  placeholder: string;
-  required: boolean;
-  value: string;
-}
-
-const inputs: Inputs[] = [
-  {id: 'name', placeholder: 'Full Name', required: true, value: ''},
-  {id: 'avatar', placeholder: 'Picture', required: false, value: ''},
-  {id: 'description', placeholder: 'Description', required: true, value: ''},
-  {id: 'website', placeholder: 'Website', required: true, value: ''},
-  {
-    id: 'DOB',
-    placeholder: 'Date of birth MM/DD/YYYY',
-    required: false,
-    value: '',
-  },
-  {id: 'gender', placeholder: 'Gender', required: false, value: ''},
-  {id: 'weight', placeholder: 'Weight', required: false, value: ''},
-  {id: 'height', placeholder: 'Height', required: false, value: ''},
-];
+import {inputs, props} from './types';
 
 export const ModalAdd: React.FC<props> = ({
   isVisible,
@@ -60,13 +31,7 @@ export const ModalAdd: React.FC<props> = ({
     }
   }, []);
 
-  useEffect(() => {
-    setShow(isVisible);
-  }, [isVisible]);
-
-  const handleClose = () => {
-    setShow(false);
-  };
+  const handleClose = () => setShow(false);
 
   const checkErrors = () => {
     let errors = false;
@@ -112,7 +77,7 @@ export const ModalAdd: React.FC<props> = ({
 
   return (
     <Modal
-      onDismiss={onClose}
+      onModalHide={onClose}
       isVisible={show}
       customBackdrop={
         <TouchableOpacity style={styles.backdrop} onPress={handleClose} />

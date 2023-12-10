@@ -3,13 +3,13 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Button} from '../button';
 
 interface props {
-  setModalAdd: (state: boolean) => void;
+  setModalAdd: () => void;
 }
 
 export const NoPatientData: React.FC<props> = ({setModalAdd}) => (
   <View style={styles.container}>
     <Text style={styles.text}>No users to display.</Text>
-    <Button text="Add" onPress={() => setModalAdd(true)} />
+    <Button text="Add" onPress={setModalAdd} />
   </View>
 );
 

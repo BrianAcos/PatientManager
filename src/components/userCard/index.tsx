@@ -10,7 +10,7 @@ const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
 
 interface props {
   patientData: PatientData;
-  setModalAdd: (status: boolean) => void;
+  setModalAdd: () => void;
   setPatient: (patient: PatientData) => void;
 }
 
@@ -23,7 +23,7 @@ const UserCard: React.FC<props> = ({patientData, setModalAdd, setPatient}) => {
 
   const onPressEdit = () => {
     setPatient(patientData);
-    setModalAdd(true);
+    setModalAdd();
   };
 
   const getDOB = () => {

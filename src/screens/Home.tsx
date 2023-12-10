@@ -82,15 +82,14 @@ function Home(): React.JSX.Element {
     setPatient(null);
   };
 
+  const toggleModal = () => setModalAdd(!modalAdd);
+
   return (
     <Provider store={store}>
       <SafeAreaProvider>
         <SafeAreaView style={{flex: 1}}>
           {!loading && !error && (
-            <Searcher
-              data={data}
-              setFilteredData={setFilteredData}
-            />
+            <Searcher data={data} setFilteredData={setFilteredData} />
           )}
           <FlatList
             numColumns={1}
@@ -99,7 +98,7 @@ function Home(): React.JSX.Element {
             renderItem={({item}) => (
               <UserCard
                 patientData={item}
-                setModalAdd={setModalAdd}
+                setModalAdd={toggleModal}
                 setPatient={setPatient}
               />
             )}
@@ -112,14 +111,12 @@ function Home(): React.JSX.Element {
                   onPressBackup={onPressBackup}
                 />
               ) : (
-                <NoPatientData setModalAdd={setModalAdd} />
+                <NoPatientData setModalAdd={toggleModal} />
               )
             }
             contentContainerStyle={{margin: 10, paddingBottom: 100}}
           />
-          {!loading && !error && (
-            <ButtonAddPatient onPress={() => setModalAdd(true)} />
-          )}
+          {!loading && !error && <ButtonAddPatient onPress={toggleModal} />}
           {/* MODAL TO ADD OR EDIT PATIENT */}
           {modalAdd && (
             <ModalAdd
