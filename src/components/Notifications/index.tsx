@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Image,
   StyleSheet,
@@ -18,18 +18,29 @@ export const Notifications: React.FC = () => {
   const {show, type, message} = useSelector(
     (state: RootState) => state.notifications,
   );
-  const translateY = useRef(new Animated.Value(0)).current;
+  const translateY = useRef(new Animated.Value(-50)).current;
   const dispatch = useDispatch();
   const touchStart = useRef<any>(null);
   const {top} = useSafeAreaInsets();
 
+  useEffect(() => {
+    if (show) {
+      Animated.timing(translateY, {
+        toValue: top + 10,
+        duration: 500,
+        easing: Easing.ease,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [show]);
+
   const closeNotify = () => {
     Animated.timing(translateY, {
-      toValue: 100,
-      duration: 300,
-      easing: Easing.linear,
-      useNativeDriver: false
-    });
+      toValue: -50,
+      duration: 500,
+      easing: Easing.ease,
+      useNativeDriver: true,
+    }).start();
     setTimeout(() => dispatch(removeNotification()), 1000);
   };
 
@@ -46,7 +57,7 @@ export const Notifications: React.FC = () => {
       style={[
         styles.container,
         type === 'error' && styles.error,
-        {top: top + 10, transform: [{ translateY }]},
+        {transform: [{translateY}]},
       ]}
       onTouchStart={e => (touchStart.current = e.nativeEvent)}
       onTouchEnd={onTouchEnd}>
@@ -66,10 +77,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     alignSelf: 'center',
-    width: '90%',
+    width: '96%',
     flexDirection: 'row',
     height: 50,
     position: 'absolute',
+    top: 0,
   },
   error: {backgroundColor: '#FF2400'},
   text: {
