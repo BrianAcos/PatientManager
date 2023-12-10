@@ -11,12 +11,14 @@ import {Notifications} from '../components/notifications';
 import {LoadingComponent} from '../components/loadingComponent';
 import {ErrorComponent} from '../components/errorComponent';
 import {NoPatientData} from '../components/noPatientData';
-import {setNotification } from '../actions/notifications';
+import {setNotification} from '../actions/notifications';
+import {Searcher} from '../components/searcher';
 
 const backupPatientData = require('../../response.json');
 
 function Home(): React.JSX.Element {
   const [data, setData] = useState<PatientData[]>([]);
+  const [filteredData, setFilteredData] = useState<PatientData[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
   const [patient, setPatient] = useState<PatientData | null>(null);
@@ -84,9 +86,15 @@ function Home(): React.JSX.Element {
     <Provider store={store}>
       <SafeAreaProvider>
         <SafeAreaView style={{flex: 1}}>
+          {!loading && !error && (
+            <Searcher
+              data={data}
+              setFilteredData={setFilteredData}
+            />
+          )}
           <FlatList
             numColumns={1}
-            data={data}
+            data={filteredData || data}
             keyExtractor={(_, idx) => `${idx}`}
             renderItem={({item}) => (
               <UserCard
