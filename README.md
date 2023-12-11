@@ -46,9 +46,43 @@ npm run ios
 yarn ios
 ```
 
+The entire code is written in the ./src folder.
 
-The entrie code writed is in the folder ./src
+We have the folders organized as follows:
 
+### /actions:
+- Contains files that define Redux actions.
+- Actions are events that trigger state changes in the application.
+- Used exclusively for managing the app's notification state.
+
+### /assets:
+- Stores static resources such as images.
+
+### /components:
+- This folder contains mostly reusable React components.
+- Among the most important and complex ones are:
+  - **modalAdd:** Used for editing, adding user information, and adding a new user.
+  - **searcher:** Filters users by name.
+  - **notifications:** Notifies about user additions or modifications.
+  - **userCard:** Cards displaying user information with avatar, name, etc.
+    - Can be expanded to view additional information such as description, date of birth, gender, etc.
+
+### /reducers:
+- Contains files that define Redux reducers.
+- Reducers specify how the application state changes in response to actions.
+
+### /screens:
+- Contains React components representing full screens of the application.
+- Each screen can include multiple components and navigation logic.
+- Only the main HOME screen exists, so React Navigation has not been implemented.
+
+### /store:
+- Centralized configuration for the Redux store.
+- In the future, it could include additional configurations such as middleware, state persistence, etc.
+
+### /types:
+- Defines TypeScript types to enhance code safety and integrity.
+- Includes interfaces and types used throughout the project.
 
 ```bash
 you can install in your android the app => ./PatientManager.apk 
