@@ -12,9 +12,11 @@ interface props {
   patientData: PatientData;
   setModalAdd: () => void;
   setPatient: (patient: PatientData) => void;
+  expanded: boolean;
+  setExpanded: (state: any) => void;
 }
 
-const UserCard: React.FC<props> = ({patientData, setModalAdd, setPatient}) => {
+const UserCard: React.FC<props> = ({patientData, setModalAdd, setPatient, setExpanded, expanded}) => {
   const [expand, setExpand] = useState(false);
   const [error, setError] = useState(false);
   const dateOfADmission = new Date(patientData.createdAt);
@@ -54,7 +56,7 @@ const UserCard: React.FC<props> = ({patientData, setModalAdd, setPatient}) => {
           <Text>Admission: {dateOfADmission.toLocaleDateString('en-US')}</Text>
           <Text>Patient Number: {patientData.id}</Text>
         </View>
-        <TouchableOpacity onPress={() => setExpand(!expand)}>
+        <TouchableOpacity onPress={() => setExpanded(patientData.id)}>
           <Image
             source={ArrowDown}
             resizeMode="contain"
@@ -62,7 +64,7 @@ const UserCard: React.FC<props> = ({patientData, setModalAdd, setPatient}) => {
           />
         </TouchableOpacity>
       </View>
-      {expand && (
+      {expanded && (
         <View style={styles.extraDataContainer}>
           <Text style={styles.description}>
             {patientData.description || 'There is not description'}

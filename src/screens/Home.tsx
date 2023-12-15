@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {Provider} from 'react-redux';
 import store from '../store/store';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -13,6 +13,7 @@ import {ErrorComponent} from '../components/errorComponent';
 import {NoPatientData} from '../components/noPatientData';
 import {setNotification} from '../actions/notifications';
 import {Searcher} from '../components/searcher';
+import {Button} from '../components/button';
 
 const backupPatientData = require('../../response.json');
 
@@ -23,6 +24,8 @@ function Home(): React.JSX.Element {
   const [error, setError] = useState<boolean>(false);
   const [patient, setPatient] = useState<PatientData | null>(null);
   const [modalAdd, setModalAdd] = useState<boolean>(false);
+  const [allExpand, setAllExpand] = useState<boolean | null>(null);
+  const [stateOfCards, setStateOfCards] = useState<any>({});
 
   const getPatientData = async () => {
     setLoading(true);
@@ -84,12 +87,27 @@ function Home(): React.JSX.Element {
 
   const toggleModal = () => setModalAdd(!modalAdd);
 
+  const setExpanded = (id: any) => {
+    setStateOfCards({...stateOfCards, [id]: stateOfCards[id] ? false : true});
+  };
+
+  const handleSetAllUnexpand = () => {
+    setAllExpand(false);
+    setStateOfCards({});
+  };
+
   return (
     <Provider store={store}>
       <SafeAreaProvider>
         <SafeAreaView style={{flex: 1}}>
           {!loading && !error && (
             <Searcher data={data} setFilteredData={setFilteredData} />
+          )}
+          {!loading && !error && (
+            <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+              <Button text="Expand All" onPress={() => setAllExpand(true)} />
+              <Button text="Colapse All" onPress={handleSetAllUnexpand} />
+            </View>
           )}
           <FlatList
             numColumns={1}
@@ -100,6 +118,8 @@ function Home(): React.JSX.Element {
                 patientData={item}
                 setModalAdd={toggleModal}
                 setPatient={setPatient}
+                expanded={(stateOfCards[item.id] || allExpand)}
+                setExpanded={id => setExpanded(id)}
               />
             )}
             ListEmptyComponent={
